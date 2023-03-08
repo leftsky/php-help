@@ -293,3 +293,23 @@ if (!function_exists("has_chinese_words")) {
     }
 }
 
+if (!function_exists("str_replace_list")) {
+    /**
+     * @param array $list 查找数组中的每个字符串
+     * @param string $string 原始字符串
+     * @param string $symbol 替换字符串
+     * @return string   替换后的结果
+     */
+    function str_replace_list(array $list, string $string, string $symbol = '*'): string
+    {
+        if (sizeof($list) <= 0 || $string == "") return $string;
+        $stringAfter = $string;
+        $pattern = "/" . implode("|", $list) . "/i";
+        if (preg_match_all($pattern, $string, $matches)) {
+            $patternList = $matches[0];
+            $replaceArray = array_combine($patternList, array_fill(0, count($patternList), $symbol));
+            $stringAfter = strtr($string, $replaceArray);
+        }
+        return $stringAfter;
+    }
+}
